@@ -1,0 +1,386 @@
+import type { Module } from '../types';
+
+const CASTLE_FEN = 'r3k2r/pppqbppp/2npbn2/4p3/4P3/2NPBN2/PPPQBPPP/R3K2R w KQkq - 0 1';
+
+export const m1: Module = {
+  id: 'm1',
+  num: 1,
+  title: 'Rules and Notation',
+  stage: 1,
+  icon: 'K',
+  blurb: 'How every piece moves, the special moves, check, checkmate, and how to read chess notation.',
+  lessons: [
+    {
+      id: 'm1-board',
+      title: 'The board and notation',
+      summary: 'Files, ranks, and the names of the squares.',
+      minutes: 4,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Sixty-four squares',
+          body: 'The chessboard has 8 **files** (columns) named **a** to **h**, and 8 **ranks** (rows) numbered **1** to **8**. Every square has a name made of its file and rank, like **e4** or **g7**.\n\nWhite starts on ranks 1 and 2, Black on ranks 7 and 8. The bottom-right square from White’s side, **h1**, is always a light square: “light on the right”.',
+          highlights: ['e4', 'g7', 'h1'],
+        },
+        { kind: 'square', prompt: 'Tap the square **e4**.', squares: ['e4'], explain: 'e4 is on the e-file, fourth rank. It is one of the four central squares.' },
+        { kind: 'square', prompt: 'Tap the square **c6**.', squares: ['c6'], explain: 'c-file, sixth rank: in Black’s half of the board.' },
+        { kind: 'square', prompt: 'Tap the square the **white queen** starts on.', squares: ['d1'], explain: 'The queen starts on her own colour: the white queen on the light square d1, the black queen on the dark square d8.' },
+        {
+          kind: 'text',
+          title: 'Writing moves down',
+          body: 'Moves are written in **algebraic notation**. Each piece has a letter: **K** king, **Q** queen, **R** rook, **B** bishop, **N** knight. Pawns have no letter.\n\n- **Nf3**: a knight moves to f3.\n- **e4**: a pawn moves to e4.\n- **Bxc6**: a bishop captures on c6 (x means “takes”).\n- **+** means check, **#** means checkmate, **O-O** is castling short.',
+          arrows: [{ from: 'g1', to: 'f3' }, { from: 'e2', to: 'e4' }],
+        },
+        {
+          kind: 'quiz',
+          prompt: 'What does **Qxd5+** mean?',
+          noBoard: true,
+          options: [
+            { text: 'The queen captures on d5 and gives check.', correct: true, why: 'Q is the queen, x is a capture, d5 is the square and + is check.' },
+            { text: 'The queen moves to d5 and wins the game.', why: 'That would be written with #. The + means check, and x means a capture.' },
+            { text: 'A pawn captures the queen on d5.', why: 'A pawn capture starts with the pawn’s file, like exd5.' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'm1-pieces',
+      title: 'How the pieces move',
+      summary: 'Rook, bishop, queen, knight, king and pawn.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Rook, bishop and queen',
+          body: 'The **rook** slides any number of squares along a rank or file. The **bishop** slides diagonally and stays on its colour forever. The **queen** combines both: she is the most powerful piece.\n\nSliding pieces cannot jump over other pieces. They capture by landing on an enemy piece.',
+          fen: 'W: Kg1 Rd4; B: Kg8; w',
+          arrows: [{ from: 'd4', to: 'd8' }, { from: 'd4', to: 'a4' }, { from: 'd4', to: 'h4' }, { from: 'd4', to: 'd1' }],
+        },
+        { kind: 'move', prompt: 'Capture the black knight with your **rook**.', fen: 'W: Kg1 Rd1 f2 g2 h2; B: Kg8 Nd6 f7 g7 h7; w', solution: 'Rxd6', hint: 'The rook moves straight up the d-file.', explain: 'The rook slides from d1 to d6 and captures. Nothing blocks the file.' },
+        { kind: 'move', prompt: 'Capture the rook with your **bishop**.', fen: 'W: Kg1 Bc1 f2 g2 h2; B: Kb8 Rh6 a7 b7 c7; w', solution: 'Bxh6', hint: 'Follow the diagonal from c1 toward the h-file.', explain: 'c1, d2, e3, f4, g5, h6: the bishop slides along the dark diagonal.' },
+        { kind: 'move', prompt: 'Your **queen** can capture the rook. Do it.', fen: 'W: Kg1 Qd1 f2 g2 h2; B: Kg8 Ra4 f7 g7 h6; w', solution: 'Qxa4', hint: 'The queen moves diagonally too.', explain: 'From d1 the queen reaches a4 along the diagonal d1–c2–b3–a4.' },
+        {
+          kind: 'text',
+          title: 'The knight',
+          body: 'The **knight** moves in an L-shape: two squares in one direction and one square to the side. It is the only piece that can **jump** over others, and it always lands on a square of the opposite colour.',
+          fen: 'W: Kg1 Ne4; B: Kg8; w',
+          highlights: ['d6', 'f6', 'g5', 'g3', 'f2', 'd2', 'c3', 'c5'],
+        },
+        { kind: 'move', prompt: 'Capture the black queen with your **knight**.', fen: 'W: Kg1 Nf3 f2 g2 h2; B: Kg8 Qe5 f7 g7 h7; w', solution: 'Nxe5', hint: 'Two squares up, one to the left.', explain: 'Nf3 to e5 is a knight jump. The queen was undefended.' },
+        {
+          kind: 'text',
+          title: 'King and pawn',
+          body: 'The **king** moves one square in any direction. It can never move into check.\n\nThe **pawn** moves straight forward one square (or two on its first move), but it **captures diagonally** forward. Pawns never move backward.',
+          fen: 'W: Kg1 e4; B: Kg8 d5; w',
+          arrows: [{ from: 'e4', to: 'e5', color: 'blue' }, { from: 'e4', to: 'd5', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'Capture the knight with your **pawn**.', fen: 'W: Kg1 e4 f2 g2; B: Kg8 Nd5 g7 h7; w', solution: 'exd5', hint: 'Pawns capture one square diagonally forward.', explain: 'The e4 pawn captures on d5. It cannot capture straight ahead.' },
+      ],
+    },
+    {
+      id: 'm1-special',
+      title: 'Special moves',
+      summary: 'Castling, en passant and promotion.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Castling',
+          body: '**Castling** moves the king two squares toward a rook, and the rook jumps to the other side of the king. It is the only move where two pieces move at once.\n\nYou may castle only if: neither piece has moved, the squares between them are empty, and the king is not in check, does not pass through check, and does not land in check.\n\n**O-O** is castling short (kingside), **O-O-O** castling long (queenside).',
+          fen: CASTLE_FEN,
+          arrows: [{ from: 'e1', to: 'g1', color: 'gold' }, { from: 'h1', to: 'f1', color: 'gold' }],
+        },
+        { kind: 'move', prompt: 'Castle **kingside**.', fen: CASTLE_FEN, solution: 'O-O', hint: 'Move the king two squares toward the h1 rook.', explain: 'The king goes to g1 and the rook to f1. Your king is tucked away behind pawns.' },
+        { kind: 'move', prompt: 'Now castle **queenside**.', fen: CASTLE_FEN, solution: 'O-O-O', hint: 'Move the king two squares toward the a1 rook.', explain: 'The king lands on c1 and the rook on d1, ready to use the d-file.' },
+        {
+          kind: 'text',
+          title: 'En passant',
+          body: 'When a pawn moves two squares and lands beside an enemy pawn, the enemy pawn may capture it **as if it had moved only one square**. This is **en passant** (“in passing”). It is allowed only on the very next move.',
+          fen: 'W: Kb3 e5; B: Kh8 d7; b',
+          setup: 'd5',
+          arrows: [{ from: 'e5', to: 'd6', color: 'green' }],
+        },
+        { kind: 'move', prompt: 'Black just played …d5. Capture it **en passant**.', fen: 'W: Kb3 e5; B: Kh8 d7; b', setup: 'd5', solution: 'exd6', hint: 'Your pawn moves diagonally to d6, behind the black pawn.', explain: 'exd6 removes the d5 pawn. Your new pawn on d6 is too fast for the black king.' },
+        {
+          kind: 'text',
+          title: 'Promotion',
+          body: 'A pawn that reaches the last rank **promotes**: it becomes a queen, rook, bishop or knight. Almost always you choose a queen.',
+          fen: 'W: Kg1 c7; B: Kh8 h7; w',
+          arrows: [{ from: 'c7', to: 'c8', color: 'gold' }],
+        },
+        { kind: 'move', prompt: 'Promote your pawn to a **queen**.', fen: 'W: Kg1 c7; B: Kh8 h7; w', solution: 'c8=Q+', hint: 'Push the pawn to c8 and choose the queen.', explain: 'The new queen even gives check along the eighth rank.' },
+      ],
+    },
+    {
+      id: 'm1-mate',
+      title: 'Check, checkmate and stalemate',
+      summary: 'How the game is won, and how it can be drawn.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Check and checkmate',
+          body: 'A king that is attacked is in **check**. You must get out of check at once: move the king, block the attack, or capture the attacker.\n\nIf there is no way out, it is **checkmate** and the game is over.',
+          fen: 'W: Kg1 Ra8; B: Kg8 f7 g7 h7; b',
+          arrows: [{ from: 'a8', to: 'g8', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'Checkmate in one move.', fen: 'W: Kg1 Ra1 f2 g2 h2; B: Kg8 f7 g7 h7; w', solution: 'Ra8#', hint: 'Black’s king is trapped behind its own pawns.', explain: 'Ra8 is check, and the king cannot escape: its own pawns block it. This is a back-rank mate.' },
+        { kind: 'move', prompt: 'Checkmate with the **queen**. Your king helps.', fen: 'W: Kb6 Qc1; B: Ka8; w', solution: 'Qc8#', hint: 'Check along the back rank while your king covers a7 and b7.', explain: 'The queen controls the eighth rank and the king covers the seventh. No escape.' },
+        {
+          kind: 'text',
+          title: 'Stalemate',
+          body: 'If the player to move has **no legal moves** but is **not in check**, the game is a draw by **stalemate**. With a big material advantage, be careful not to take away every square without giving check.',
+          fen: 'W: Kf7 Qg6; B: Kh8; b',
+        },
+        {
+          kind: 'quiz',
+          prompt: 'It is Black’s move. What is the result?',
+          fen: 'W: Kf7 Qg6; B: Kh8; b',
+          options: [
+            { text: 'Draw by stalemate.', correct: true, why: 'Black is not in check but has no legal move. White threw away the win.' },
+            { text: 'White wins by checkmate.', why: 'The king is not in check, so it cannot be checkmate.' },
+            { text: 'Black must pass.', why: 'There is no passing in chess. No legal moves and no check means stalemate.' },
+          ],
+        },
+        { kind: 'move', prompt: 'Avoid stalemate: find the **checkmate**.', fen: 'W: Kf7 Qg5; B: Kh8; w', solution: 'Qg7#', hint: 'Your king protects the queen on g7.', explain: 'Qg7 is checkmate. Careless moves like Qg6 would be stalemate.' },
+      ],
+    },
+    {
+      id: 'm1-value',
+      title: 'Piece values',
+      summary: 'How much each piece is worth, and how to trade.',
+      minutes: 4,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The point system',
+          body: 'Players use a simple scale to compare material:\n\n- Pawn = **1**\n- Knight = **3**, Bishop = **3**\n- Rook = **5**\n- Queen = **9**\n- King: priceless (the game ends when it is mated).\n\nWinning a rook for a bishop or knight is called **winning the exchange** (+2).',
+          noBoard: true,
+        },
+        { kind: 'move', prompt: 'Your queen attacks two undefended pieces. Take the **more valuable** one.', fen: 'W: Kg1 Qd4 f2 g2 h2; B: Kg8 Ra7 Nh4 f7 g7 h6; w', solution: 'Qxa7', hint: 'A rook is worth more than a knight.', explain: 'The rook is worth 5, the knight 3. Always count before you capture.' },
+        {
+          kind: 'quiz',
+          prompt: 'You can trade your knight for the opponent’s rook. Is that good?',
+          noBoard: true,
+          options: [
+            { text: 'Yes: you win the exchange, about +2.', correct: true, why: 'A rook (5) for a knight (3) gains two points of material.' },
+            { text: 'No: knights are worth more than rooks.', why: 'Rooks are generally stronger, especially in open positions and endgames.' },
+            { text: 'It makes no difference.', why: 'Material matters: +2 is a real advantage.' },
+          ],
+        },
+        {
+          kind: 'quiz',
+          prompt: 'Which trade **loses** material?',
+          noBoard: true,
+          options: [
+            { text: 'Your rook for a bishop.', correct: true, why: 'You give 5 and get 3: you lose the exchange.' },
+            { text: 'Your bishop for a knight.', why: 'Both are worth about 3, so this is an even trade.' },
+            { text: 'Your knight for a rook.', why: 'That wins material.' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'm1-checkpoint',
+      title: 'Checkpoint: Rules',
+      summary: 'Prove you know the rules.',
+      minutes: 5,
+      checkpoint: true,
+      steps: [
+        { kind: 'square', prompt: 'Tap the square **f6**.', squares: ['f6'], explain: 'f-file, sixth rank.' },
+        { kind: 'move', prompt: 'Checkmate in one.', fen: 'W: Kg1 Rb2 Ra7; B: Kh8; w', solution: 'Rb8#', hint: 'The a7 rook already controls the seventh rank.', explain: 'The two rooks form a ladder: one covers the seventh rank, the other mates on the eighth.' },
+        { kind: 'move', prompt: 'Black played …f5. Capture en passant.', fen: 'W: Kc1 e5; B: Kh8 f7; b', setup: 'f5', solution: 'exf6', hint: 'Capture diagonally onto f6.', explain: 'En passant: the e5 pawn captures the f-pawn as if it had moved one square.' },
+        { kind: 'move', prompt: 'Promote and give check.', fen: 'W: Kc1 g7; B: Ka8 a7; w', solution: 'g8=Q+', hint: 'Push to the eighth rank and pick a queen.', explain: 'The new queen checks along the back rank.' },
+        {
+          kind: 'quiz',
+          prompt: 'Which of these is **not** a way to get out of check?',
+          noBoard: true,
+          options: [
+            { text: 'Castling.', correct: true, why: 'You may never castle out of check.' },
+            { text: 'Moving the king.', why: 'Moving the king to a safe square is allowed.' },
+            { text: 'Blocking the check.', why: 'Putting a piece in the way is allowed.' },
+          ],
+        },
+        { kind: 'move', prompt: 'Find the checkmate, not the stalemate.', fen: 'W: Kb6 Rc1; B: Ka8; w', solution: 'Rc8#', hint: 'Your king covers a7 and b7.', explain: 'The rook checks on the back rank and the king covers every escape.' },
+      ],
+    },
+  ],
+};
+
+export const m2: Module = {
+  id: 'm2',
+  num: 2,
+  title: 'Opening Principles',
+  stage: 1,
+  icon: 'P',
+  blurb: 'Control the centre, develop your pieces, castle, and avoid the classic beginner traps.',
+  lessons: [
+    {
+      id: 'm2-centre',
+      title: 'Fight for the centre',
+      summary: 'Why d4, d5, e4 and e5 matter so much.',
+      minutes: 4,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The four central squares',
+          body: 'The squares **d4, d5, e4 and e5** are the centre of the board. Pieces in the centre control more squares and can reach either side quickly. A knight in the centre attacks 8 squares; in a corner, only 2.\n\nThat is why most good openings begin with **1.e4** or **1.d4**.',
+          highlights: ['d4', 'd5', 'e4', 'e5'],
+        },
+        {
+          kind: 'text',
+          title: 'A knight on the rim is dim',
+          body: 'Compare the two knights: in the centre, the white knight controls 8 squares. On the edge, the black knight controls only 4.',
+          fen: 'W: Kg1 Nd4; B: Kg8 Na6; w',
+          highlights: ['c6', 'e6', 'f5', 'f3', 'e2', 'c2', 'b3', 'b5'],
+        },
+        {
+          kind: 'quiz',
+          prompt: 'Which first move does the most for the centre?',
+          noBoard: true,
+          options: [
+            { text: '1.e4', correct: true, why: 'It occupies the centre, controls d5, and opens lines for the queen and bishop.' },
+            { text: '1.h4', why: 'An edge pawn does almost nothing for the centre or development.' },
+            { text: '1.a3', why: 'A waiting move that does not fight for the centre.' },
+          ],
+        },
+        {
+          kind: 'demo',
+          title: 'Taking the centre',
+          body: 'Watch both sides fight for the centre in the first moves of an Italian Game.',
+          line: '1. e4 {White takes space in the centre.} e5 {Black does the same.} 2. Nf3 {The knight develops toward the centre and attacks e5.} Nc6 {Black defends e5 with a developing move.} 3. Bc4 {The bishop aims at the centre and f7.} Bc5 {Black mirrors.}',
+        },
+      ],
+    },
+    {
+      id: 'm2-develop',
+      title: 'Develop your pieces',
+      summary: 'Knights and bishops out, one move each.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Development',
+          body: '**Development** means bringing pieces off the back rank to useful squares. In the opening:\n\n- Develop **knights and bishops** first.\n- Move each piece **once**, not the same piece twice.\n- Do not bring the **queen** out too early: it gets chased and you lose time.\n- Connect your rooks by castling and moving the queen off the back rank.',
+          noBoard: true,
+        },
+        {
+          kind: 'quiz',
+          prompt: 'White to move. Which move follows the opening principles best?',
+          setup: '1. e4 e5 2. Nf3 Nc6',
+          options: [
+            { text: 'Bc4 or Bb5, developing a new piece.', correct: true, why: 'A new piece joins the game and aims at the centre or the e5 defender.' },
+            { text: 'Ng5, moving the knight again.', why: 'Moving the same piece twice loses time without a clear gain.' },
+            { text: 'Qe2, bringing out the queen.', why: 'It blocks the f1 bishop and develops the queen too early.' },
+          ],
+        },
+        {
+          kind: 'quiz',
+          prompt: 'Black has moved only pawns. What is the danger?',
+          fen: 'rnbqkbnr/ppp2p1p/3p2p1/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 4',
+          options: [
+            { text: 'Falling behind in development; White will attack first.', correct: true, why: 'White already has three pieces out and can castle. Black’s king is still in the centre.' },
+            { text: 'Nothing: pawns are the most important pieces.', why: 'Pawns matter, but pieces win the battles in the opening.' },
+            { text: 'Black will run out of pawn moves.', why: 'The real problem is undeveloped pieces.' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'm2-castle',
+      title: 'Castle early',
+      summary: 'Get your king to safety.',
+      minutes: 4,
+      steps: [
+        {
+          kind: 'text',
+          title: 'King safety',
+          body: 'In the opening and middlegame, the king is a target. Castling tucks it behind a wall of pawns and brings a rook toward the centre.\n\nAim to castle within the first **ten moves**, usually on the kingside.',
+          fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5',
+          arrows: [{ from: 'e1', to: 'g1', color: 'gold' }],
+        },
+        { kind: 'move', prompt: 'Your pieces are ready. Castle to safety.', setup: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 Nf6', solution: 'O-O', hint: 'The squares between king and rook are empty.', explain: 'Castling secures the king and activates the rook.' },
+        {
+          kind: 'quiz',
+          prompt: 'Why is a king in the centre dangerous once the position opens?',
+          noBoard: true,
+          options: [
+            { text: 'Open files and diagonals let enemy pieces attack it.', correct: true, why: 'Rooks and queens on open central files can deliver checks and mating attacks.' },
+            { text: 'Kings cannot move in the centre.', why: 'They can move, but they are exposed.' },
+            { text: 'It blocks your own pawns.', why: 'The issue is safety, not pawn movement.' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'm2-queen',
+      title: 'Early queen attacks',
+      summary: 'Defend Scholar’s Mate and punish early queen moves.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'demo',
+          title: 'The queen gets chased',
+          body: 'Bringing the queen out early lets the opponent develop with tempo.',
+          line: '1. e4 e5 2. Qh5 {Threatens the e5 pawn and eyes f7.} Nc6 {Defends e5 and develops.} 3. Bc4 {Threatens Qxf7 mate.} g6 {Blocks the queen and gains time.} 4. Qf3 {Threatens mate again.} Nf6 {Another developing move covers f7. Black is already ahead in development.} 5. Qb3 Nd4 {The knight attacks the queen and c2.}',
+        },
+        { kind: 'move', prompt: 'White threatens **Qxf7#**. Defend!', setup: '1. e4 e5 2. Bc4 Nc6 3. Qh5', solution: 'g6|Qe7|Qf6', hint: 'Block the queen’s path or defend f7.', explain: '…g6 blocks the queen and attacks it; …Qe7 defends f7 too. Either way, Black is safe.' },
+        { kind: 'move', prompt: 'Black forgot about f7. **Checkmate**!', setup: '1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6', solution: 'Qxf7#', hint: 'f7 is attacked by your queen and bishop.', explain: 'Scholar’s Mate. The bishop protects the queen on f7.' },
+        { kind: 'move', prompt: 'Gain time on the queen while developing.', setup: '1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3', solution: 'Nf6', hint: 'Develop a piece that also covers f7.', explain: '…Nf6 develops and blocks the f-file. White’s queen will be chased again.' },
+      ],
+    },
+    {
+      id: 'm2-mistakes',
+      title: 'Classic opening mistakes',
+      summary: 'Grabbing pawns, ignoring threats, and moving too many pawns.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Five habits to avoid',
+          body: '1. **Moving too many pawns.** Pawns do not develop pieces.\n2. **Grabbing pawns** while behind in development.\n3. **Ignoring your opponent’s threats.** Before every move, ask: what does their last move want?\n4. **Moving the f-pawn early.** It weakens the e1–h4 or e8–h5 diagonal.\n5. **Leaving pieces undefended.** Loose pieces drop off.',
+          noBoard: true,
+        },
+        {
+          kind: 'demo',
+          title: 'Fool’s Mate',
+          body: 'The fastest checkmate shows why weakening the king’s diagonal is dangerous.',
+          line: '1. f3 {Weakens the e1–h4 diagonal.} e5 2. g4 {A second weakening move.} Qh4# {Checkmate on move two.}',
+        },
+        { kind: 'move', prompt: 'White weakened the king. Punish it.', setup: '1. f3 e5 2. g4', solution: 'Qh4#', hint: 'Look at the diagonal from d8 to h4.', explain: 'The queen mates along the e1–h4 diagonal.' },
+        {
+          kind: 'quiz',
+          prompt: 'Your opponent just moved a piece. What should you ask first?',
+          noBoard: true,
+          options: [
+            { text: 'What does that move threaten?', correct: true, why: 'Checking threats first prevents most blunders.' },
+            { text: 'Which of my pieces is the prettiest?', why: 'Always start with the opponent’s threats.' },
+            { text: 'How can I attack right now?', why: 'Attack after you know you are safe.' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'm2-checkpoint',
+      title: 'Checkpoint: Opening principles',
+      summary: 'Show you can open the game well.',
+      minutes: 5,
+      checkpoint: true,
+      steps: [
+        { kind: 'move', prompt: 'Defend against the mate threat on f7.', setup: '1. e4 e5 2. Qh5 Nc6 3. Bc4', solution: 'g6|Qe7|Qf6', hint: 'f7 is attacked twice.', explain: 'Block the queen with …g6 or defend f7 with the queen.' },
+        { kind: 'move', prompt: 'Checkmate in one.', setup: '1. e4 e5 2. Bc4 Bc5 3. Qh5 Nf6', solution: 'Qxf7#', hint: 'The bishop supports the queen.', explain: 'Scholar’s Mate again: f7 was only defended by the king.' },
+        { kind: 'move', prompt: 'Castle to safety.', setup: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5', solution: 'O-O', hint: 'Your king is still on e1.', explain: 'Castling finishes the job of the opening: king safe, rook active.' },
+        {
+          kind: 'quiz',
+          prompt: 'Which move breaks an opening principle?',
+          setup: '1. e4 e5 2. Nf3 Nc6',
+          options: [
+            { text: 'Nh4, moving the knight to the edge again.', correct: true, why: 'Moving the same piece twice, to the rim, loses time.' },
+            { text: 'Bc4, developing a bishop.', why: 'That is good development.' },
+            { text: 'Nc3, developing a knight.', why: 'Developing a new piece is exactly right.' },
+          ],
+        },
+      ],
+    },
+  ],
+};

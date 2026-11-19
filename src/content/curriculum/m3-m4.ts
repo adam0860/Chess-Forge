@@ -1,0 +1,225 @@
+import type { Module } from '../types';
+
+export const m3: Module = {
+  id: 'm3',
+  num: 3,
+  title: 'Tactics',
+  stage: 2,
+  icon: 'N',
+  blurb: 'Forks, pins, skewers, discovered attacks and the other weapons that win material.',
+  lessons: [
+    {
+      id: 'm3-forks',
+      title: 'Forks',
+      summary: 'One piece attacks two targets at once.',
+      minutes: 7,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The fork',
+          body: 'A **fork** is a move that attacks **two or more** pieces at once. Your opponent can only save one of them.\n\nKnights are the most famous forkers because their jumps are hard to see, but every piece, even a pawn or the king, can fork.',
+          fen: 'W: Kg1 Ne7; B: Kg8 Qc8; b',
+          arrows: [{ from: 'e7', to: 'g8', color: 'red' }, { from: 'e7', to: 'c8', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'Win the black queen with a **knight fork**.', fen: 'W: Kg1 Qd1 Nf5 a2 b2 f2 g2 h2; B: Kg8 Qc8 Rf8 a7 b7 f7 g7 h7; w', solution: 'Ne7+', hint: 'Find a knight check that also attacks c8.', explain: 'Ne7+ checks the king and attacks the queen. After the king moves, Nxc8 wins the queen.' },
+        { kind: 'move', prompt: 'Fork two pieces with a **pawn**.', fen: 'W: Kg1 Bc1 Nb1 d4 e4 g2 h2; B: Kg8 Bd6 Nf6 f7 g7 h7 a7; w', solution: 'e5', hint: 'A pawn attacks the two squares diagonally in front of it.', explain: 'e5 attacks the bishop and the knight, and the d4 pawn protects it. Black loses a piece.' },
+        { kind: 'move', prompt: 'Use your **queen** to fork the king and the knight.', fen: 'W: Kg1 Qd1 f2 g2 h2; B: Kg8 Na5 Be7 g7 h7; w', solution: 'Qd5+', hint: 'Check the king along the diagonal toward g8.', explain: 'Qd5+ checks the king and attacks the a5 knight along the fifth rank.' },
+        { kind: 'practice', title: 'Fork practice', themes: ['fork'], count: 4, maxRating: 1500 },
+      ],
+    },
+    {
+      id: 'm3-pins',
+      title: 'Pins',
+      summary: 'Freeze a piece in front of a more valuable one.',
+      minutes: 7,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The pin',
+          body: 'A **pin** attacks a piece that cannot move without exposing something more valuable behind it.\n\n- In an **absolute pin**, the piece behind is the king: the pinned piece may not legally move.\n- In a **relative pin**, the piece behind is valuable (often the queen): moving is legal but costly.\n\nOnly the line pieces (bishop, rook, queen) can pin.',
+          fen: 'W: Kg1 Bb5; B: Ke8 Nc6; w',
+          arrows: [{ from: 'b5', to: 'e8', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'The c6 knight is pinned. **Attack it** with a pawn.', fen: 'W: Kg1 Bb5 d4 f2 g2 h2; B: Ke8 Nc6 b7 f7 g7 h7; w', solution: 'd5', hint: 'A pinned piece cannot run away.', explain: 'd5 attacks the pinned knight. It cannot move because the king is behind it. Black loses a piece.' },
+        { kind: 'move', prompt: 'A pinned piece is a poor defender. Win the rook.', fen: 'W: Kc1 Bb2 Rg1; B: Kh8 Rg7 h7; w', solution: 'Rxg7', hint: 'The king cannot recapture on a square your bishop controls.', explain: 'The rook on g7 is pinned to the king by the b2 bishop, and after Rxg7 the king cannot take back because g7 is covered.' },
+        { kind: 'practice', title: 'Pin practice', themes: ['pin'], count: 3, maxRating: 1700 },
+      ],
+    },
+    {
+      id: 'm3-skewers',
+      title: 'Skewers',
+      summary: 'A pin in reverse: the valuable piece is in front.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The skewer',
+          body: 'A **skewer** attacks a valuable piece that must move out of the way, exposing a piece behind it. It is a pin in reverse.\n\nSkewers often start with a **check**: the king must move, and you capture what was behind it.',
+          fen: 'W: Kg1 Ra7; B: Kd7 Qh7; b',
+          arrows: [{ from: 'a7', to: 'h7', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'Skewer the king and queen.', fen: 'W: Kg1 Ra1 f2 g2; B: Kd7 Qh7 b6; w', solution: 'Ra7+', hint: 'Check along the seventh rank.', explain: 'Ra7+ forces the king off the seventh rank, and then Rxh7 wins the queen.' },
+        { kind: 'move', prompt: 'Skewer with the **bishop**.', fen: 'W: Kg1 Be2 b3 g2 h2; B: Kd5 Rf7 a7; w', solution: 'Bc4+', hint: 'Check the king so that the rook is behind it on the same diagonal.', explain: 'Bc4+ is protected by the b3 pawn. The king must step off the diagonal, and Bxf7 wins the rook.' },
+        { kind: 'practice', title: 'Skewer practice', themes: ['skewer'], count: 3, maxRating: 1800 },
+      ],
+    },
+    {
+      id: 'm3-discovered',
+      title: 'Discovered attacks',
+      summary: 'Move one piece to unleash another.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The discovered attack',
+          body: 'When a piece moves off a line, it can **uncover** an attack by the piece behind it. If the moving piece makes its own threat, you have two attacks in one move.\n\nA **discovered check** is the most powerful kind: the opponent must answer the check, and the moving piece is free to grab anything.',
+          fen: 'W: Kg1 Re1 Ne5; B: Ke8 Qa7; w',
+          arrows: [{ from: 'e1', to: 'e8', color: 'red' }, { from: 'e5', to: 'c6', color: 'blue' }],
+        },
+        { kind: 'move', prompt: 'Find the **discovered check** that wins the queen.', fen: 'W: Kg1 Re1 Ne5 f2 g2 h2; B: Ke8 Qa7 f7 g7 h7; w', solution: 'Nc6+', hint: 'Move the knight off the e-file to a square that attacks a7.', explain: 'Nc6+ uncovers the rook’s check on e8 and attacks the queen. Even …Qe7 does not help: the knight covers e7. Next move, Nxa7.' },
+        { kind: 'practice', title: 'Discovered attack practice', themes: ['discoveredAttack'], count: 3, maxRating: 1800 },
+      ],
+    },
+    {
+      id: 'm3-defender',
+      title: 'Removing the defender',
+      summary: 'Capture or chase the piece that holds everything together.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Remove the guard',
+          body: 'If a piece is defended only once, **eliminate the defender** first. Capture it, chase it away, or force it to move, and the piece it protected falls.',
+          fen: 'W: Kg1 Rd1 Bg5; B: Kg8 Bd5 Nf6; w',
+          arrows: [{ from: 'g5', to: 'f6', color: 'red' }, { from: 'f6', to: 'd5', color: 'blue' }],
+        },
+        { kind: 'move', prompt: 'The d5 bishop is defended only by the knight. Win a piece.', fen: 'W: Kg1 Rd1 Bg5 a2 f2 g2 h2; B: Kg8 Bd5 Nf6 a7 f7 g7 h7; w', solution: 'Bxf6', hint: 'Capture the defender first.', explain: 'After Bxf6, the d5 bishop has lost its only defender. If …gxf6, Rxd5 wins a piece.' },
+        { kind: 'practice', title: 'Practice: hanging and defended pieces', themes: ['hangingPiece', 'capturingDefender'], count: 4, maxRating: 1300 },
+      ],
+    },
+    {
+      id: 'm3-deflection',
+      title: 'Deflection and decoy',
+      summary: 'Force pieces onto bad squares, or away from their duties.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Deflection and decoy',
+          body: 'A **deflection** forces a defender away from the square or piece it guards. A **decoy** lures a piece, often the king or queen, onto a square where it can be attacked.\n\nBoth usually start with a sacrifice: you give something to drag a piece where you want it.',
+          noBoard: true,
+        },
+        { kind: 'move', prompt: 'Decoy the king onto a forking square, then win the queen.', fen: 'W: Kh1 Rf1 Ne5 a2 g2 h2; B: Kg8 Qb6 a7 g7 h7; w', solution: 'Rf8+ Kxf8 Nd7+ Ke7 Nxb6', hint: 'A rook sacrifice drags the king to f8. Which knight check then hits b6?', explain: 'Rf8+! forces Kxf8, and Nd7+ forks the king and queen. White gives a rook to win the queen.' },
+        { kind: 'practice', title: 'Sacrifice practice', themes: ['sacrifice', 'deflection'], count: 4, maxRating: 1900 },
+      ],
+    },
+    {
+      id: 'm3-checkpoint',
+      title: 'Checkpoint: Tactics',
+      summary: 'Mixed tactics from engine-verified games.',
+      minutes: 8,
+      checkpoint: true,
+      steps: [
+        { kind: 'move', prompt: 'Win material with a knight fork.', fen: 'W: Kg1 Nd5 a2 b2 f2 g2 h2; B: Kg8 Rc8 Qb6 a7 f7 g7 h7; w', solution: 'Ne7+', hint: 'Check the king and attack the rook at the same time.', explain: 'Ne7+ forks the king on g8 and the rook on c8. After the king moves, Nxc8.' },
+        { kind: 'practice', title: 'Mixed tactics', themes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'hangingPiece'], count: 6, maxRating: 1600 },
+      ],
+    },
+  ],
+};
+
+export const m4: Module = {
+  id: 'm4',
+  num: 4,
+  title: 'Checkmate Patterns',
+  stage: 2,
+  icon: 'Q',
+  blurb: 'The basic mates with queen and rook, and the classic patterns every strong player knows by heart.',
+  lessons: [
+    {
+      id: 'm4-basic',
+      title: 'Mating with queen and rook',
+      summary: 'The box method and the final blow.',
+      minutes: 6,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Shrink the box',
+          body: 'To mate a lone king, use your piece to **cut the king into a box** and shrink it step by step. Bring your own king up to help, and deliver mate on the edge of the board.\n\nWith a queen, stay a knight’s jump away from the enemy king to shrink the box safely. Always check for **stalemate** before each move.',
+          fen: 'W: Kc3 Qe4; B: Kd6; w',
+          highlights: ['a6', 'b6', 'c6', 'd6', 'a7', 'b7', 'c7', 'd7', 'a8', 'b8', 'c8', 'd8', 'a5', 'b5', 'c5', 'd5'],
+        },
+        { kind: 'move', prompt: 'Mate with king and queen.', fen: 'W: Kb6 Qc1; B: Ka8; w', solution: 'Qc8#', hint: 'Your king covers the seventh rank.', explain: 'The queen controls the back rank and the king covers a7 and b7.' },
+        { kind: 'move', prompt: 'Mate with king and rook.', fen: 'W: Kf6 Ra1; B: Kf8; w', solution: 'Ra8#', hint: 'The kings face each other; the rook does the rest.', explain: 'With the kings in opposition, the rook mates along the back rank.' },
+        { kind: 'move', prompt: 'Two rooks: the ladder mate.', fen: 'W: Kg1 Ra7 Rb2; B: Kh8; w', solution: 'Rb8#', hint: 'One rook covers the seventh rank.', explain: 'The rooks climb like a ladder: the a7 rook holds the seventh, the other mates on the eighth.' },
+      ],
+    },
+    {
+      id: 'm4-backrank',
+      title: 'Back-rank mate',
+      summary: 'When the king is trapped behind its own pawns.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'The back rank',
+          body: 'A castled king behind three unmoved pawns has no escape squares. A rook or queen landing on the back rank is mate. To protect yourself, make **luft** (air) with a pawn move like h3 when you have time.',
+          fen: 'W: Kg1 Re8; B: Kg8 f7 g7 h7; b',
+          arrows: [{ from: 'e8', to: 'g8', color: 'red' }],
+        },
+        { kind: 'move', prompt: 'Back-rank mate in one.', fen: 'W: Kg1 Re1 f2 g2 h2; B: Kg8 Ra7 f7 g7 h7; w', solution: 'Re8#', hint: 'The eighth rank is unguarded.', explain: 'Re8 is mate: the king cannot escape through its own pawns.' },
+        { kind: 'practice', title: 'Back-rank practice', themes: ['backRankMate'], count: 3 },
+      ],
+    },
+    {
+      id: 'm4-smothered',
+      title: 'Smothered mate',
+      summary: 'A knight mates a king buried by its own pieces.',
+      minutes: 5,
+      steps: [
+        {
+          kind: 'text',
+          title: 'Buried alive',
+          body: 'In a **smothered mate**, the king is completely surrounded by its own pieces, so a single knight check is mate. The famous version starts with a queen sacrifice that forces a rook to block the last escape square.',
+          fen: 'W: Kg1 Nf7; B: Kh8 Rg8 g7 h7; b',
+        },
+        { kind: 'move', prompt: 'Smothered mate in one.', fen: 'W: Kg1 Ng5 a2 b2; B: Kh8 Rg8 g7 h7 a7 b7; w', solution: 'Nf7#', hint: 'The king has no free squares at all.', explain: 'Nf7 checks the king, which is boxed in by its own rook and pawns.' },
+        { kind: 'move', prompt: 'The classic: **mate in two**.', fen: 'W: Kg1 Qd5 Nh6 a2 b2; B: Kh8 Re8 g7 h7 a7 b7; w', solution: 'Qg8+ Rxg8 Nf7#', hint: 'Sacrifice the queen to force the rook onto g8.', explain: 'Qg8+! can only be taken by the rook, and then Nf7 is smothered mate.' },
+      ],
+    },
+    {
+      id: 'm4-patterns',
+      title: 'Arabian, Boden’s and more',
+      summary: 'Partner pieces that mate together.',
+      minutes: 6,
+      steps: [
+        { kind: 'text', title: 'Arabian mate', body: 'A **rook and knight** team up: the knight protects the rook next to the king and covers the escape square.', fen: 'W: Kg1 Rh7 Nf6; B: Kh8; b' },
+        { kind: 'move', prompt: 'Deliver the Arabian mate.', fen: 'W: Kg1 Rb7 Nf6 a2; B: Kh8 a7; w', solution: 'Rh7#', hint: 'The knight protects h7 and covers g8.', explain: 'Rh7 is protected by the knight, which also covers g8.' },
+        { kind: 'text', title: 'Boden’s mate', body: 'Two **bishops** on crossing diagonals mate a king that has castled queenside, usually after its own pieces block it.', fen: 'W: Kg1 Bf4 Ba6; B: Kc8 Rd8 Nd7 a7 c6; b' },
+        { kind: 'move', prompt: 'Boden’s mate in one.', fen: 'W: Kg1 Bf4 Bd3 f2 g2 h2; B: Kc8 Rd8 Nd7 a7 c6 f7 g7 h7; w', solution: 'Ba6#', hint: 'The f4 bishop already covers b8 and c7.', explain: 'Ba6 checks along a6–b7–c8, and the other bishop covers every escape.' },
+        { kind: 'practice', title: 'Mate in one', themes: ['mateIn1'], count: 4 },
+      ],
+    },
+    {
+      id: 'm4-mate2',
+      title: 'Mate in two',
+      summary: 'Check, force a reply, then mate.',
+      minutes: 6,
+      steps: [
+        { kind: 'text', title: 'Forcing moves first', body: 'In mating attacks, look at **checks first**, then captures, then threats. Checks limit your opponent’s replies, so you can calculate further.', noBoard: true },
+        { kind: 'practice', title: 'Mate in two', themes: ['mateIn2'], count: 5 },
+      ],
+    },
+    {
+      id: 'm4-checkpoint',
+      title: 'Checkpoint: Mating patterns',
+      summary: 'Find the mates.',
+      minutes: 6,
+      checkpoint: true,
+      steps: [
+        { kind: 'move', prompt: 'Mate in one.', fen: 'W: Kg1 Re1 a2 f2 g2 h2; B: Kg8 Qb6 a7 f7 g7 h7; w', solution: 'Re8#', hint: 'Look at Black’s back rank.', explain: 'The back rank is undefended: Re8 mate.' },
+        { kind: 'move', prompt: 'Mate in two.', fen: 'W: Kg1 Qd5 Nh6 a2 b2; B: Kh8 Re8 g7 h7 a7 b7; w', solution: 'Qg8+ Rxg8 Nf7#', hint: 'A famous queen sacrifice.', explain: 'Philidor’s legacy: smothered mate after the queen sacrifice.' },
+        { kind: 'practice', title: 'Mixed mates', themes: ['mateIn1', 'mateIn2', 'mateIn3'], count: 5 },
+      ],
+    },
+  ],
+};
