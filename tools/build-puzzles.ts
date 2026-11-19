@@ -169,7 +169,12 @@ let trivial = 0;
 for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl')).sort()) {
   for (const line of readFileSync(`${dir}/${f}`, 'utf8').split('\n')) {
     if (!line.trim()) continue;
-    const raw = JSON.parse(line) as Raw;
+    let raw: Raw;
+    try {
+      raw = JSON.parse(line) as Raw;
+    } catch {
+      continue;
+    }
     const key = raw.fen.split(' ').slice(0, 2).join(' ') + raw.moves[0];
     if (seen.has(key)) continue;
     seen.add(key);
